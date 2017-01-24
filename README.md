@@ -1,6 +1,6 @@
 This repository introduces the fundamental concepts of
 [PyTorch](https://github.com/pytorch/pytorch)
-through simple code snippets.
+through self-contained examples.
 
 At its core, PyTorch provides two main features:
 - An n-dimensional Tensor, similar to numpy but can run on GPUs
@@ -444,7 +444,6 @@ for t in range(500):
 import torch
 from torch.autograd import Variable
 
-
 # N is batch size; D_in is input dimension;
 # H is hidden dimension; D_out is output dimension.
 N, D_in, H, D_out = 64, 1000, 100, 10
@@ -485,7 +484,6 @@ for t in range(500):
 
   # Calling the step function on an Optimizer makes an update to its parameters
   optimizer.step()
-
 ```
 
 
@@ -616,5 +614,4 @@ for t in range(500):
   optimizer.zero_grad()
   loss.backward()
   optimizer.step()
-
 ```

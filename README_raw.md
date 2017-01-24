@@ -1,6 +1,6 @@
 This repository introduces the fundamental concepts of
 [PyTorch](https://github.com/pytorch/pytorch)
-through simple code snippets.
+through self-contained examples.
 
 At its core, PyTorch provides two main features:
 - An n-dimensional Tensor, similar to numpy but can run on GPUs
