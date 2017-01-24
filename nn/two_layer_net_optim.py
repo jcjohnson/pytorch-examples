@@ -1,7 +1,6 @@
 import torch
 from torch.autograd import Variable
 
-
 """
 A fully-connected ReLU network with one hidden layer, trained to predict y from x
 by minimizing squared Euclidean distance.
@@ -54,4 +53,3 @@ for t in range(500):
 
   # Calling the step function on an Optimizer makes an update to its parameters
   optimizer.step()
-

@@ -230,9 +230,6 @@ for t in range(500):
 import torch
 from torch.autograd import Variable
 
-
-
-
 class MyReLU(torch.autograd.Function):
   """
   We can implement our own custom autograd Functions by subclassing
@@ -390,7 +387,6 @@ with tf.Session() as sess:
 # Code in file nn/two_layer_net_nn.py
 import torch
 from torch.autograd import Variable
-
 
 # N is batch size; D_in is input dimension;
 # H is hidden dimension; D_out is output dimension.

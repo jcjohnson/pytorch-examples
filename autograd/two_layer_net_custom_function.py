@@ -1,8 +1,6 @@
 import torch
 from torch.autograd import Variable
 
-
-
 """
 A fully-connected ReLU network with one hidden layer and no biases, trained to
 predict y from x by minimizing squared Euclidean distance.
@@ -13,7 +11,6 @@ Variables, and uses PyTorch autograd to compute gradients.
 In this implementation we implement our own custom autograd function to perform
 the ReLU function.
 """
-
 
 class MyReLU(torch.autograd.Function):
   """
