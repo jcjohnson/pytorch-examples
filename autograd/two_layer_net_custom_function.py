@@ -59,8 +59,8 @@ y = Variable(torch.randn(N, D_out).type(dtype), requires_grad=False)
 # Create random Tensors for weights, and wrap them in Variables.
 # Setting requires_grad=True indicates that we want to compute gradients with
 # respect to these Variables during the backward pass.
-w1 = Variable(torch.randn(D_in, H), requires_grad=True)
-w2 = Variable(torch.randn(H, D_out), requires_grad=True)
+w1 = Variable(torch.randn(D_in, H).type(dtype), requires_grad=True)
+w2 = Variable(torch.randn(H, D_out).type(dtype), requires_grad=True)
 
 learning_rate = 1e-6
 for t in range(500):
