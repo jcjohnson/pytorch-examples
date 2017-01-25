@@ -21,8 +21,10 @@ N, D_in, H, D_out = 64, 1000, 100, 10
 x = Variable(torch.randn(N, D_in))
 y = Variable(torch.randn(N, D_out), requires_grad=False)
 
-# Use the nn package to define our model as a sequence of layers. Each Linear
-# module has its own weight and bias.
+# Use the nn package to define our model as a sequence of layers. nn.Sequential
+# is a Module which contains other Modules, and applies them in sequence to
+# produce its output. Each Linear Module computes output from input using a
+# linear function, and holds internal Variables for its weight and bias.
 model = torch.nn.Sequential(
           torch.nn.Linear(D_in, H),
           torch.nn.ReLU(),

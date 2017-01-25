@@ -32,9 +32,9 @@ loss_fn = torch.nn.MSELoss(size_average=False)
 # Use the optim package to define an Optimizer that will update the weights of
 # the model for us. Here we will use stochastic gradient descent (SGD), but the
 # optim package contains many other optimization algoriths. The first argument
-# to the SGD constructor tells the optimizer which Variables it should update.
+# to the Adam constructor tells the optimizer which Variables it should update.
 learning_rate = 1e-4
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 for t in range(500):
   # Forward pass: compute predicted y by passing x to the model.
   y_pred = model(x)
