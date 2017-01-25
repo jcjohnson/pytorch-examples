@@ -18,12 +18,11 @@ class MyReLU(torch.autograd.Function):
   torch.autograd.Function and implementing the forward and backward passes
   which operate on Tensors.
   """
-
   def forward(self, input):
     """
     In the forward pass we receive a Tensor containing the input and return a
-    Tensor containing the output. You can save cache arbitrary Tensors for use
-    in the backward pass using the save_for_backward method.
+    Tensor containing the output. You can cache arbitrary Tensors for use in the
+    backward pass using the save_for_backward method.
     """
     self.save_for_backward(input)
     return input.clamp(min=0)
@@ -48,14 +47,10 @@ dtype = torch.FloatTensor
 N, D_in, H, D_out = 64, 1000, 100, 10
 
 # Create random Tensors to hold input and outputs, and wrap them in Variables.
-# Setting requires_grad=False indicates that we do not need to compute gradients
-# with respect to these Variables during the backward pass.
 x = Variable(torch.randn(N, D_in).type(dtype), requires_grad=False)
 y = Variable(torch.randn(N, D_out).type(dtype), requires_grad=False)
 
 # Create random Tensors for weights, and wrap them in Variables.
-# Setting requires_grad=True indicates that we want to compute gradients with
-# respect to these Variables during the backward pass.
 w1 = Variable(torch.randn(D_in, H).type(dtype), requires_grad=True)
 w2 = Variable(torch.randn(H, D_out).type(dtype), requires_grad=True)
 

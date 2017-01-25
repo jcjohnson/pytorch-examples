@@ -56,12 +56,13 @@ for t in range(500):
   w2.grad.data.zero_()
 
   # Use autograd to compute the backward pass. This call will compute the
-  # gradient of all loss with respect to all Variables with requires_grad=True.
+  # gradient of loss with respect to all Variables with requires_grad=True.
   # After this call w1.data and w2.data will be Variables holding the gradient
   # of the loss with respect to w1 and w2 respectively.
   loss.backward()
 
-  # Update weights using gradient descent: w1.grad and w2.grad are Variables
-  # and w1.grad.data and w2.grad.data are Tensors.
+  # Update weights using gradient descent; w1.data and w2.data are Tensors,
+  # w1.grad and w2.grad are Variables and w1.grad.data and w2.grad.data are
+  # Tensors.
   w1.data -= learning_rate * w1.grad.data
   w2.data -= learning_rate * w2.grad.data

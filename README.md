@@ -212,21 +212,22 @@ for t in range(500):
   w2.grad.data.zero_()
 
   # Use autograd to compute the backward pass. This call will compute the
-  # gradient of all loss with respect to all Variables with requires_grad=True.
+  # gradient of loss with respect to all Variables with requires_grad=True.
   # After this call w1.data and w2.data will be Variables holding the gradient
   # of the loss with respect to w1 and w2 respectively.
   loss.backward()
 
-  # Update weights using gradient descent: w1.grad and w2.grad are Variables
-  # and w1.grad.data and w2.grad.data are Tensors.
+  # Update weights using gradient descent; w1.data and w2.data are Tensors,
+  # w1.grad and w2.grad are Variables and w1.grad.data and w2.grad.data are
+  # Tensors.
   w1.data -= learning_rate * w1.grad.data
   w2.data -= learning_rate * w2.grad.data
 ```
 
 ## PyTorch: Defining new autograd functions
 Under the hood, each primitive autograd operator is really two functions that
-operate on Tensors. The *forward* function computes output Tensors from input
-Tensors. The *backward* function recieves the gradient of the output Tensors
+operate on Tensors. The **forward** function computes output Tensors from input
+Tensors. The **backward** function receives the gradient of the output Tensors
 with respect to some scalar value, and computes the gradient of the input Tensors
 with respect to that same scalar value.
 
@@ -249,12 +250,11 @@ class MyReLU(torch.autograd.Function):
   torch.autograd.Function and implementing the forward and backward passes
   which operate on Tensors.
   """
-
   def forward(self, input):
     """
     In the forward pass we receive a Tensor containing the input and return a
-    Tensor containing the output. You can save cache arbitrary Tensors for use
-    in the backward pass using the save_for_backward method.
+    Tensor containing the output. You can cache arbitrary Tensors for use in the
+    backward pass using the save_for_backward method.
     """
     self.save_for_backward(input)
     return input.clamp(min=0)
@@ -279,14 +279,10 @@ dtype = torch.FloatTensor
 N, D_in, H, D_out = 64, 1000, 100, 10
 
 # Create random Tensors to hold input and outputs, and wrap them in Variables.
-# Setting requires_grad=False indicates that we do not need to compute gradients
-# with respect to these Variables during the backward pass.
 x = Variable(torch.randn(N, D_in).type(dtype), requires_grad=False)
 y = Variable(torch.randn(N, D_out).type(dtype), requires_grad=False)
 
 # Create random Tensors for weights, and wrap them in Variables.
-# Setting requires_grad=True indicates that we want to compute gradients with
-# respect to these Variables during the backward pass.
 w1 = Variable(torch.randn(D_in, H).type(dtype), requires_grad=True)
 w2 = Variable(torch.randn(H, D_out).type(dtype), requires_grad=True)
 
@@ -423,7 +419,7 @@ In TensorFlow, packages like [Keras](https://github.com/fchollet/keras),
 and [TFLearn](http://tflearn.org/) provide higher-level abstractions over
 raw computational graphs that are useful for building neural networks.
 
-In PyTorch, the `nn` package serves this same purpose. The nn package defines a set of
+In PyTorch, the `nn` package serves this same purpose. The `nn` package defines a set of
 **Modules**, which are roughly equivalent to neural network layers. A Module receives
 input Variables and computes output Variables, but may also hold internal state such as
 Variables containing learnable parameters. The `nn` package also defines a set of useful
@@ -522,9 +518,9 @@ model = torch.nn.Sequential(
 loss_fn = torch.nn.MSELoss(size_average=False)
 
 # Use the optim package to define an Optimizer that will update the weights of
-# the model for us. Here we will use stochastic gradient descent (SGD), but the
-# optim package contains many other optimization algoriths. The first argument
-# to the Adam constructor tells the optimizer which Variables it should update.
+# the model for us. Here we will use Adam; the optim package contains many other
+# optimization algoriths. The first argument to the Adam constructor tells the
+# optimizer which Variables it should update.
 learning_rate = 1e-4
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 for t in range(500):

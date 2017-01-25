@@ -100,8 +100,8 @@ network:
 
 ## PyTorch: Defining new autograd functions
 Under the hood, each primitive autograd operator is really two functions that
-operate on Tensors. The *forward* function computes output Tensors from input
-Tensors. The *backward* function recieves the gradient of the output Tensors
+operate on Tensors. The **forward** function computes output Tensors from input
+Tensors. The **backward** function receives the gradient of the output Tensors
 with respect to some scalar value, and computes the gradient of the input Tensors
 with respect to that same scalar value.
 
@@ -166,7 +166,7 @@ In TensorFlow, packages like [Keras](https://github.com/fchollet/keras),
 and [TFLearn](http://tflearn.org/) provide higher-level abstractions over
 raw computational graphs that are useful for building neural networks.
 
-In PyTorch, the `nn` package serves this same purpose. The nn package defines a set of
+In PyTorch, the `nn` package serves this same purpose. The `nn` package defines a set of
 **Modules**, which are roughly equivalent to neural network layers. A Module receives
 input Variables and computes output Variables, but may also hold internal state such as
 Variables containing learnable parameters. The `nn` package also defines a set of useful
