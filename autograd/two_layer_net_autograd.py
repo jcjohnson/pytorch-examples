@@ -57,7 +57,7 @@ for t in range(500):
 
   # Use autograd to compute the backward pass. This call will compute the
   # gradient of loss with respect to all Variables with requires_grad=True.
-  # After this call w1.data and w2.data will be Variables holding the gradient
+  # After this call w1.grad and w2.grad will be Variables holding the gradient
   # of the loss with respect to w1 and w2 respectively.
   loss.backward()
 
