@@ -52,8 +52,9 @@ for t in range(500):
   print(t, loss.data[0])
   
   # Manually zero the gradients before running the backward pass
-  w1.grad.data.zero_()
-  w2.grad.data.zero_()
+  if w1.grad:
+    w1.grad.data.zero_()
+    w2.grad.data.zero_()
 
   # Use autograd to compute the backward pass. This call will compute the
   # gradient of loss with respect to all Variables with requires_grad=True.
