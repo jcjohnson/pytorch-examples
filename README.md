@@ -227,9 +227,9 @@ for t in range(500):
 ## PyTorch: Defining new autograd functions
 Under the hood, each primitive autograd operator is really two functions that
 operate on Tensors. The **forward** function computes output Tensors from input
-Tensors. The **backward** function receives the gradient of the output Tensors
-with respect to some scalar value, and computes the gradient of the input Tensors
-with respect to that same scalar value.
+Tensors. The **backward** function receives the gradient of some scalar value
+with respect to the output Tensors, and computes the gradient
+of that same scalar value with respect to the input Tensors.
 
 In PyTorch we can easily define our own autograd operator by defining a subclass
 of `torch.autograd.Function` and implementing the `forward` and `backward` functions.
