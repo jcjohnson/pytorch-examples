@@ -51,10 +51,6 @@ for t in range(500):
   loss = (y_pred - y).pow(2).sum()
   print(t, loss.data[0])
   
-  # Manually zero the gradients before running the backward pass
-  w1.grad.data.zero_()
-  w2.grad.data.zero_()
-
   # Use autograd to compute the backward pass. This call will compute the
   # gradient of loss with respect to all Variables with requires_grad=True.
   # After this call w1.grad and w2.grad will be Variables holding the gradient
@@ -66,3 +62,7 @@ for t in range(500):
   # Tensors.
   w1.data -= learning_rate * w1.grad.data
   w2.data -= learning_rate * w2.grad.data
+  
+  # Manually zero the gradients before the next backward pass
+  w1.grad.data.zero_()
+  w2.grad.data.zero_()
