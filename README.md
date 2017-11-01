@@ -206,10 +206,6 @@ for t in range(500):
   # (1,); loss.data[0] is a scalar value holding the loss.
   loss = (y_pred - y).pow(2).sum()
   print(t, loss.data[0])
-  
-  # Manually zero the gradients before running the backward pass
-  w1.grad.data.zero_()
-  w2.grad.data.zero_()
 
   # Use autograd to compute the backward pass. This call will compute the
   # gradient of loss with respect to all Variables with requires_grad=True.
@@ -222,6 +218,10 @@ for t in range(500):
   # Tensors.
   w1.data -= learning_rate * w1.grad.data
   w2.data -= learning_rate * w2.grad.data
+
+  # Manually zero the gradients after running the backward pass
+  w1.grad.data.zero_()
+  w2.grad.data.zero_()
 ```
 
 ## PyTorch: Defining new autograd functions
@@ -298,10 +298,6 @@ for t in range(500):
   # Compute and print loss
   loss = (y_pred - y).pow(2).sum()
   print(t, loss.data[0])
-  
-  # Manually zero the gradients before running the backward pass
-  w1.grad.data.zero_()
-  w2.grad.data.zero_()
 
   # Use autograd to compute the backward pass.
   loss.backward()
@@ -309,6 +305,10 @@ for t in range(500):
   # Update weights using gradient descent
   w1.data -= learning_rate * w1.grad.data
   w2.data -= learning_rate * w2.grad.data
+
+  # Manually zero the gradients after running the backward pass
+  w1.grad.data.zero_()
+  w2.grad.data.zero_()
 ```
 
 ## TensorFlow: Static Graphs
