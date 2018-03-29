@@ -10,8 +10,8 @@ Variables, and uses PyTorch autograd to compute gradients.
 
 A PyTorch Variable is a wrapper around a PyTorch Tensor, and represents a node
 in a computational graph. If x is a Variable then x.data is a Tensor giving its
-value, and x.grad is another Variable holding the gradient of x with respect to
-some scalar value.
+value, and x.grad is another Variable holding the gradient of some scalar value
+with respect to x.
 
 PyTorch Variables have the same API as PyTorch tensors: (almost) any operation
 you can do on a Tensor you can also do on a Variable; the difference is that

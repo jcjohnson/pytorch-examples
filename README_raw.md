@@ -82,8 +82,8 @@ this graph then allows you to easily compute gradients.
 This sounds complicated, it's pretty simple to use in practice. We wrap our
 PyTorch Tensors in **Variable** objects; a Variable represents a node in a
 computational graph. If `x` is a Variable then `x.data` is a Tensor, and
-`x.grad` is another Variable holding the gradient of `x` with respect to some
-scalar value.
+`x.grad` is another Variable holding the gradient of some scalar value with
+respect to `x`.
 
 PyTorch Variables have the same API as PyTorch Tensors: (almost) any operation
 that you can perform on a Tensor also works on Variables; the difference is that
@@ -101,9 +101,9 @@ network:
 ## PyTorch: Defining new autograd functions
 Under the hood, each primitive autograd operator is really two functions that
 operate on Tensors. The **forward** function computes output Tensors from input
-Tensors. The **backward** function receives the gradient of the output Tensors
-with respect to some scalar value, and computes the gradient of the input Tensors
-with respect to that same scalar value.
+Tensors. The **backward** function receives the gradient of some scalar value
+with respect to the output Tensors, and computes the gradient that same scalar
+value with respect to the input Tensors.
 
 In PyTorch we can easily define our own autograd operator by defining a subclass
 of `torch.autograd.Function` and implementing the `forward` and `backward` functions.

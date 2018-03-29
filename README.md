@@ -60,7 +60,7 @@ for t in range(500):
   loss = np.square(y_pred - y).sum()
   print(t, loss)
   
-  # Backprop to compute gradients of w1 and w2 with respect to loss
+  # Backprop to compute gradients of loss with respect to w1 and w2
   grad_y_pred = 2.0 * (y_pred - y)
   grad_w2 = h_relu.T.dot(grad_y_pred)
   grad_h_relu = grad_y_pred.dot(w2.T)
@@ -125,7 +125,7 @@ for t in range(500):
   loss = (y_pred - y).pow(2).sum()
   print(t, loss)
 
-  # Backprop to compute gradients of w1 and w2 with respect to loss
+  # Backprop to compute gradients of loss with respect to w1 and w2
   grad_y_pred = 2.0 * (y_pred - y)
   grad_w2 = h_relu.t().mm(grad_y_pred)
   grad_h_relu = grad_y_pred.mm(w2.t())
@@ -157,8 +157,8 @@ this graph then allows you to easily compute gradients.
 This sounds complicated, it's pretty simple to use in practice. We wrap our
 PyTorch Tensors in **Variable** objects; a Variable represents a node in a
 computational graph. If `x` is a Variable then `x.data` is a Tensor, and
-`x.grad` is another Variable holding the gradient of `x` with respect to some
-scalar value.
+`x.grad` is another Variable holding the gradient of some scalar value with
+respect to `x`.
 
 PyTorch Variables have the same API as PyTorch Tensors: (almost) any operation
 that you can perform on a Tensor also works on Variables; the difference is that
