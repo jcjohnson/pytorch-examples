@@ -82,18 +82,18 @@ unfortunately numpy won't be enough for modern deep learning.
 
 Here we introduce the most fundamental PyTorch concept: the **Tensor**. A PyTorch
 Tensor is conceptually identical to a numpy array: a Tensor is an n-dimensional
-array, and PyTorch provides many functions for operating on these Tensors. Like
-numpy arrays, PyTorch Tensors do not know anything about deep learning or
-computational graphs or gradients; they are a generic tool for scientific
+array, and PyTorch provides many functions for operating on these Tensors.
+Any computation you might want to perform with numpy can also be accomplished
+with PyTorch Tensors; you should think of them as a generic tool for scientific
 computing.
 
 However unlike numpy, PyTorch Tensors can utilize GPUs to accelerate their
-numeric computations. To run a PyTorch Tensor on GPU, you simply need to cast it
-to a new datatype.
+numeric computations. To run a PyTorch Tensor on GPU, you use the `device`
+argument when constructing a Tensor to place the Tensor on a GPU.
 
 Here we use PyTorch Tensors to fit a two-layer network to random data. Like the
-numpy example above we need to manually implement the forward and backward
-passes through the network:
+numpy example above we manually implement the forward and backward
+passes through the network, using operations on PyTorch Tensors:
 
 ```python
 # Code in file tensor/two_layer_net_tensor.py
@@ -139,7 +139,7 @@ for t in range(500):
   w2 -= learning_rate * grad_w2
 ```
 
-## PyTorch: Variables and autograd
+## PyTorch: Autograd
 
 In the above examples, we had to manually implement both the forward and
 backward passes of our neural network. Manually implementing the backward pass
@@ -155,16 +155,19 @@ When using autograd, the forward pass of your network will define a
 functions that produce output Tensors from input Tensors. Backpropagating through
 this graph then allows you to easily compute gradients.
 
-This sounds complicated, it's pretty simple to use in practice. We wrap our
-PyTorch Tensors in **Variable** objects; a Variable represents a node in a
-computational graph. If `x` is a Variable then `x.data` is a Tensor, and
-`x.grad` is another Variable holding the gradient of `x` with respect to some
-scalar value.
+This sounds complicated, it's pretty simple to use in practice. If we want to
+compute gradients with respect to some Tensor, then we set `requires_grad=True`
+when constructing that Tensor. Any PyTorch operations on that Tensor will cause
+a computational graph to be constructed, allowing us to later perform backpropagation
+through the graph. If `x` is a Tensor with `requires_grad=True`, then after
+backpropagation `x.grad` will be another Tensor holding the gradient of `x` with
+respect to some scalar value.
 
-PyTorch Variables have the same API as PyTorch Tensors: (almost) any operation
-that you can perform on a Tensor also works on Variables; the difference is that
-using Variables defines a computational graph, allowing you to automatically
-compute gradients.
+Sometimes you may wish to prevent PyTorch from building computational graphs when
+performing certain operations on Tensors with `requires_grad=True`; for example
+we usually don't want to backpropagate through the weight update steps when
+training a neural network. In such scenarios we can use the `torch.no_grad()`
+context manager to prevent the construction of a computational graph.
 
 Here we use PyTorch Variables and autograd to implement our two-layer network;
 now we no longer need to manually implement the backward pass through the
@@ -489,8 +492,8 @@ for t in range(500):
 
 
 ## PyTorch: optim
-Up to this point we have updated the weights of our models by manually mutating the
-`.data` member for Variables holding learnable parameters. This is not a huge burden
+Up to this point we have updated the weights of our models by manually mutating
+Tensors holding learnable parameters. This is not a huge burden
 for simple optimization algorithms like stochastic gradient descent, but in practice
 we often train neural networks using more sophisiticated optimizers like AdaGrad,
 RMSProp, Adam, etc.
