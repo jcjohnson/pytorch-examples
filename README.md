@@ -291,7 +291,7 @@ N, D_in, H, D_out = 64, 1000, 100, 10
 x = torch.randn(N, D_in, device=device)
 y = torch.randn(N, D_out, device=device)
 
-# Create random Tensors for weights, and wrap them in Variables.
+# Create random Tensors for weights.
 w1 = torch.randn(D_in, H, device=device, requires_grad=True)
 w2 = torch.randn(H, D_out, device=device, requires_grad=True)
 
