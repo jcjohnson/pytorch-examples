@@ -44,7 +44,7 @@ class DynamicNet(torch.nn.Module):
 # H is hidden dimension; D_out is output dimension.
 N, D_in, H, D_out = 64, 1000, 100, 10
 
-# Create random Tensors to hold inputs and outputs, and wrap them in Variables
+# Create random Tensors to hold inputs and outputs.
 x = torch.randn(N, D_in)
 y = torch.randn(N, D_out)
 

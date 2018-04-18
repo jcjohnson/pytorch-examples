@@ -48,7 +48,7 @@ for t in range(500):
   y_pred = model(x)
 
   # Compute and print loss. We pass Tensors containing the predicted and true
-  # values of y, and the loss function returns a Variable containing the loss.
+  # values of y, and the loss function returns a Tensor containing the loss.
   loss = loss_fn(y_pred, y)
   print(t, loss.item())
   

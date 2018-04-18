@@ -43,7 +43,7 @@ for t in range(500):
   print(t, loss.item())
   
   # Before the backward pass, use the optimizer object to zero all of the
-  # gradients for the variables it will update (which are the learnable weights
+  # gradients for the Tensors it will update (which are the learnable weights
   # of the model)
   optimizer.zero_grad()
 

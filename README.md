@@ -11,10 +11,15 @@ will have a single hidden layer, and will be trained with gradient descent to
 fit random data by minimizing the Euclidean distance between the network output
 and the true output.
 
+**NOTE:** These examples have been update for PyTorch 0.4, which made several
+major changes to the core PyTorch API. Most notably, prior to 0.4 Tensors had
+to be wrapped in Variable objects to use autograd; this functionality has now
+been added directly to Tensors, and Variables are now deprecated.
+
 ### Table of Contents
 - <a href='#warm-up-numpy'>Warm-up: numpy</a>
 - <a href='#pytorch-tensors'>PyTorch: Tensors</a>
-- <a href='#pytorch-variables-and-autograd'>PyTorch: Variables and autograd</a>
+- <a href='#pytorch-autograd'>PyTorch: Autograd</a>
 - <a href='#pytorch-defining-new-autograd-functions'>PyTorch: Defining new autograd functions</a>
 - <a href='#tensorflow-static-graphs'>TensorFlow: Static Graphs</a>
 - <a href='#pytorch-nn'>PyTorch: nn</a>
@@ -169,7 +174,7 @@ we usually don't want to backpropagate through the weight update steps when
 training a neural network. In such scenarios we can use the `torch.no_grad()`
 context manager to prevent the construction of a computational graph.
 
-Here we use PyTorch Variables and autograd to implement our two-layer network;
+Here we use PyTorch Tensors and autograd to implement our two-layer network;
 now we no longer need to manually implement the backward pass through the
 network:
 
@@ -236,7 +241,7 @@ with respect to that same scalar value.
 In PyTorch we can easily define our own autograd operator by defining a subclass
 of `torch.autograd.Function` and implementing the `forward` and `backward` functions.
 We can then use our new autograd operator by constructing an instance and calling it
-like a function, passing Variables containing input data.
+like a function, passing Tensors containing input data.
 
 In this example we define our own custom autograd function for performing the ReLU
 nonlinearity, and use it to implement our two-layer network:
@@ -424,8 +429,8 @@ raw computational graphs that are useful for building neural networks.
 
 In PyTorch, the `nn` package serves this same purpose. The `nn` package defines a set of
 **Modules**, which are roughly equivalent to neural network layers. A Module receives
-input Variables and computes output Variables, but may also hold internal state such as
-Variables containing learnable parameters. The `nn` package also defines a set of useful
+input Tensors and computes output Tensors, but may also hold internal state such as
+Tensors containing learnable parameters. The `nn` package also defines a set of useful
 loss functions that are commonly used when training neural networks.
 
 In this example we use the `nn` package to implement our two-layer network:
@@ -470,7 +475,7 @@ for t in range(500):
   y_pred = model(x)
 
   # Compute and print loss. We pass Tensors containing the predicted and true
-  # values of y, and the loss function returns a Variable containing the loss.
+  # values of y, and the loss function returns a Tensor containing the loss.
   loss = loss_fn(y_pred, y)
   print(t, loss.item())
   
@@ -539,7 +544,7 @@ for t in range(500):
   print(t, loss.item())
   
   # Before the backward pass, use the optimizer object to zero all of the
-  # gradients for the variables it will update (which are the learnable weights
+  # gradients for the Tensors it will update (which are the learnable weights
   # of the model)
   optimizer.zero_grad()
 
@@ -554,8 +559,8 @@ for t in range(500):
 ## PyTorch: Custom nn Modules
 Sometimes you will want to specify models that are more complex than a sequence of
 existing Modules; for these cases you can define your own Modules by subclassing
-`nn.Module` and defining a `forward` which receives input Variables and produces
-output Variables using other modules or other autograd operations on Variables.
+`nn.Module` and defining a `forward` which receives input Tensors and produces
+output Tensors using other modules or other autograd operations on Tensors.
 
 In this example we implement our two-layer network as a custom Module subclass:
 
@@ -668,7 +673,7 @@ class DynamicNet(torch.nn.Module):
 # H is hidden dimension; D_out is output dimension.
 N, D_in, H, D_out = 64, 1000, 100, 10
 
-# Create random Tensors to hold inputs and outputs, and wrap them in Variables
+# Create random Tensors to hold inputs and outputs.
 x = torch.randn(N, D_in)
 y = torch.randn(N, D_out)
 
