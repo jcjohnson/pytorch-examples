@@ -13,23 +13,24 @@ a generic n-dimensional array to be used for arbitrary numeric computation.
 
 The biggest difference between a numpy array and a PyTorch Tensor is that
 a PyTorch Tensor can run on either CPU or GPU. To run operations on the GPU,
-just cast the Tensor to a cuda datatype.
+just pass a different value to the `device` argument when constructing the
+Tensor.
 """
 
-dtype = torch.FloatTensor
-# dtype = torch.cuda.FloatTensor # Uncomment this to run on GPU
+device = torch.device('cpu')
+# device = torch.device('cuda') # Uncomment this to run on GPU
 
 # N is batch size; D_in is input dimension;
 # H is hidden dimension; D_out is output dimension.
 N, D_in, H, D_out = 64, 1000, 100, 10
 
 # Create random input and output data
-x = torch.randn(N, D_in).type(dtype)
-y = torch.randn(N, D_out).type(dtype)
+x = torch.randn(N, D_in, device=device)
+y = torch.randn(N, D_out, device=device)
 
 # Randomly initialize weights
-w1 = torch.randn(D_in, H).type(dtype)
-w2 = torch.randn(H, D_out).type(dtype)
+w1 = torch.randn(D_in, H, device=device)
+w2 = torch.randn(H, D_out, device=device)
 
 learning_rate = 1e-6
 for t in range(500):
@@ -38,9 +39,10 @@ for t in range(500):
   h_relu = h.clamp(min=0)
   y_pred = h_relu.mm(w2)
 
-  # Compute and print loss
+  # Compute and print loss; loss is a scalar, and is stored in a PyTorch Tensor
+  # of shape (); we can get its value as a Python number with loss.item().
   loss = (y_pred - y).pow(2).sum()
-  print(t, loss)
+  print(t, loss.item())
 
   # Backprop to compute gradients of w1 and w2 with respect to loss
   grad_y_pred = 2.0 * (y_pred - y)

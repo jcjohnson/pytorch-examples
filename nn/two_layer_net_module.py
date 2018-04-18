@@ -1,5 +1,4 @@
 import torch
-from torch.autograd import Variable
 
 """
 A fully-connected ReLU network with one hidden layer, trained to predict y from x
@@ -22,38 +21,37 @@ class TwoLayerNet(torch.nn.Module):
 
   def forward(self, x):
     """
-    In the forward function we accept a Variable of input data and we must return
-    a Variable of output data. We can use Modules defined in the constructor as
-    well as arbitrary operators on Variables.
+    In the forward function we accept a Tensor of input data and we must return
+    a Tensor of output data. We can use Modules defined in the constructor as
+    well as arbitrary (differentiable) operations on Tensors.
     """
     h_relu = self.linear1(x).clamp(min=0)
     y_pred = self.linear2(h_relu)
     return y_pred
 
-
 # N is batch size; D_in is input dimension;
 # H is hidden dimension; D_out is output dimension.
 N, D_in, H, D_out = 64, 1000, 100, 10
 
-# Create random Tensors to hold inputs and outputs, and wrap them in Variables
-x = Variable(torch.randn(N, D_in))
-y = Variable(torch.randn(N, D_out), requires_grad=False)
+# Create random Tensors to hold inputs and outputs
+x = torch.randn(N, D_in)
+y = torch.randn(N, D_out)
 
-# Construct our model by instantiating the class defined above
+# Construct our model by instantiating the class defined above.
 model = TwoLayerNet(D_in, H, D_out)
 
 # Construct our loss function and an Optimizer. The call to model.parameters()
 # in the SGD constructor will contain the learnable parameters of the two
 # nn.Linear modules which are members of the model.
-criterion = torch.nn.MSELoss(size_average=False)
+loss_fn = torch.nn.MSELoss(size_average=False)
 optimizer = torch.optim.SGD(model.parameters(), lr=1e-4)
 for t in range(500):
   # Forward pass: Compute predicted y by passing x to the model
   y_pred = model(x)
 
   # Compute and print loss
-  loss = criterion(y_pred, y)
-  print(t, loss.data[0])
+  loss = loss_fn(y_pred, y)
+  print(t, loss.item())
 
   # Zero gradients, perform a backward pass, and update the weights.
   optimizer.zero_grad()
