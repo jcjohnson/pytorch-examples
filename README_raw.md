@@ -11,10 +11,15 @@ will have a single hidden layer, and will be trained with gradient descent to
 fit random data by minimizing the Euclidean distance between the network output
 and the true output.
 
+**NOTE:** These examples have been update for PyTorch 0.4, which made several
+major changes to the core PyTorch API. Most notably, prior to 0.4 Tensors had
+to be wrapped in Variable objects to use autograd; this functionality has now
+been added directly to Tensors, and Variables are now deprecated.
+
 ### Table of Contents
 - <a href='#warm-up-numpy'>Warm-up: numpy</a>
 - <a href='#pytorch-tensors'>PyTorch: Tensors</a>
-- <a href='#pytorch-variables-and-autograd'>PyTorch: Variables and autograd</a>
+- <a href='#pytorch-autograd'>PyTorch: Autograd</a>
 - <a href='#pytorch-defining-new-autograd-functions'>PyTorch: Defining new autograd functions</a>
 - <a href='#tensorflow-static-graphs'>TensorFlow: Static Graphs</a>
 - <a href='#pytorch-nn'>PyTorch: nn</a>
@@ -46,24 +51,24 @@ unfortunately numpy won't be enough for modern deep learning.
 
 Here we introduce the most fundamental PyTorch concept: the **Tensor**. A PyTorch
 Tensor is conceptually identical to a numpy array: a Tensor is an n-dimensional
-array, and PyTorch provides many functions for operating on these Tensors. Like
-numpy arrays, PyTorch Tensors do not know anything about deep learning or
-computational graphs or gradients; they are a generic tool for scientific
+array, and PyTorch provides many functions for operating on these Tensors.
+Any computation you might want to perform with numpy can also be accomplished
+with PyTorch Tensors; you should think of them as a generic tool for scientific
 computing.
 
 However unlike numpy, PyTorch Tensors can utilize GPUs to accelerate their
-numeric computations. To run a PyTorch Tensor on GPU, you simply need to cast it
-to a new datatype.
+numeric computations. To run a PyTorch Tensor on GPU, you use the `device`
+argument when constructing a Tensor to place the Tensor on a GPU.
 
 Here we use PyTorch Tensors to fit a two-layer network to random data. Like the
-numpy example above we need to manually implement the forward and backward
-passes through the network:
+numpy example above we manually implement the forward and backward
+passes through the network, using operations on PyTorch Tensors:
 
 ```python
 :INCLUDE tensor/two_layer_net_tensor.py
 ```
 
-## PyTorch: Variables and autograd
+## PyTorch: Autograd
 
 In the above examples, we had to manually implement both the forward and
 backward passes of our neural network. Manually implementing the backward pass
@@ -79,18 +84,21 @@ When using autograd, the forward pass of your network will define a
 functions that produce output Tensors from input Tensors. Backpropagating through
 this graph then allows you to easily compute gradients.
 
-This sounds complicated, it's pretty simple to use in practice. We wrap our
-PyTorch Tensors in **Variable** objects; a Variable represents a node in a
-computational graph. If `x` is a Variable then `x.data` is a Tensor, and
-`x.grad` is another Variable holding the gradient of `x` with respect to some
-scalar value.
+This sounds complicated, it's pretty simple to use in practice. If we want to
+compute gradients with respect to some Tensor, then we set `requires_grad=True`
+when constructing that Tensor. Any PyTorch operations on that Tensor will cause
+a computational graph to be constructed, allowing us to later perform backpropagation
+through the graph. If `x` is a Tensor with `requires_grad=True`, then after
+backpropagation `x.grad` will be another Tensor holding the gradient of `x` with
+respect to some scalar value.
 
-PyTorch Variables have the same API as PyTorch Tensors: (almost) any operation
-that you can perform on a Tensor also works on Variables; the difference is that
-using Variables defines a computational graph, allowing you to automatically
-compute gradients.
+Sometimes you may wish to prevent PyTorch from building computational graphs when
+performing certain operations on Tensors with `requires_grad=True`; for example
+we usually don't want to backpropagate through the weight update steps when
+training a neural network. In such scenarios we can use the `torch.no_grad()`
+context manager to prevent the construction of a computational graph.
 
-Here we use PyTorch Variables and autograd to implement our two-layer network;
+Here we use PyTorch Tensors and autograd to implement our two-layer network;
 now we no longer need to manually implement the backward pass through the
 network:
 
@@ -108,7 +116,7 @@ with respect to that same scalar value.
 In PyTorch we can easily define our own autograd operator by defining a subclass
 of `torch.autograd.Function` and implementing the `forward` and `backward` functions.
 We can then use our new autograd operator by constructing an instance and calling it
-like a function, passing Variables containing input data.
+like a function, passing Tensors containing input data.
 
 In this example we define our own custom autograd function for performing the ReLU
 nonlinearity, and use it to implement our two-layer network:
@@ -168,8 +176,8 @@ raw computational graphs that are useful for building neural networks.
 
 In PyTorch, the `nn` package serves this same purpose. The `nn` package defines a set of
 **Modules**, which are roughly equivalent to neural network layers. A Module receives
-input Variables and computes output Variables, but may also hold internal state such as
-Variables containing learnable parameters. The `nn` package also defines a set of useful
+input Tensors and computes output Tensors, but may also hold internal state such as
+Tensors containing learnable parameters. The `nn` package also defines a set of useful
 loss functions that are commonly used when training neural networks.
 
 In this example we use the `nn` package to implement our two-layer network:
@@ -180,8 +188,8 @@ In this example we use the `nn` package to implement our two-layer network:
 
 
 ## PyTorch: optim
-Up to this point we have updated the weights of our models by manually mutating the
-`.data` member for Variables holding learnable parameters. This is not a huge burden
+Up to this point we have updated the weights of our models by manually mutating
+Tensors holding learnable parameters. This is not a huge burden
 for simple optimization algorithms like stochastic gradient descent, but in practice
 we often train neural networks using more sophisiticated optimizers like AdaGrad,
 RMSProp, Adam, etc.
@@ -200,8 +208,8 @@ will optimize the model using the Adam algorithm provided by the `optim` package
 ## PyTorch: Custom nn Modules
 Sometimes you will want to specify models that are more complex than a sequence of
 existing Modules; for these cases you can define your own Modules by subclassing
-`nn.Module` and defining a `forward` which receives input Variables and produces
-output Variables using other modules or other autograd operations on Variables.
+`nn.Module` and defining a `forward` which receives input Tensors and produces
+output Tensors using other modules or other autograd operations on Tensors.
 
 In this example we implement our two-layer network as a custom Module subclass:
 
