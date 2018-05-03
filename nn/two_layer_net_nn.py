@@ -13,7 +13,7 @@ input and may have some trainable weights or other state.
 """
 
 device = torch.device('cpu')
-device = torch.device('cuda') # Uncomment this to run on GPU
+# device = torch.device('cuda') # Uncomment this to run on GPU
 
 # N is batch size; D_in is input dimension;
 # H is hidden dimension; D_out is output dimension.
