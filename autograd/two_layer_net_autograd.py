@@ -10,10 +10,10 @@ Tensors, and uses PyTorch autograd to compute gradients.
 When we create a PyTorch Tensor with requires_grad=True, then operations
 involving that Tensor will not just compute values; they will also build up
 a computational graph in the background, allowing us to easily backpropagate
-through the graph to compute gradients of some Tensors with respect to a
-downstream loss. Concretely if x is a Tensor with x.requires_grad == True then
-after backpropagation x.grad will be another Tensor holding the gradient of x
-with respect to some scalar value.
+through the graph to compute gradients of some downstream (scalar) loss with
+respect to a Tensor. Concretely if x is a Tensor with x.requires_grad == True
+then after backpropagation x.grad will be another Tensor holding the gradient
+of x with respect to some scalar value.
 """
 
 device = torch.device('cpu')
