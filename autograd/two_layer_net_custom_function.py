@@ -27,6 +27,7 @@ class MyReLU(torch.autograd.Function):
     ctx.save_for_backward(x)
     return x.clamp(min=0)
 
+  @staticmethod
   def backward(ctx, grad_output):
     """
     In the backward pass we receive the context object and a Tensor containing
