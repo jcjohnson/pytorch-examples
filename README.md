@@ -464,8 +464,12 @@ model = torch.nn.Sequential(
         ).to(device)
 
 # The nn package also contains definitions of popular loss functions; in this
-# case we will use Mean Squared Error (MSE) as our loss function.
-loss_fn = torch.nn.MSELoss(size_average=False)
+# case we will use Mean Squared Error (MSE) as our loss function. Setting
+# reduction='sum' means that we are computing the *sum* of squared errors rather
+# than the mean; this is for consistency with the examples above where we
+# manually compute the loss, but in practice it is more common to use mean
+# squared error as a loss by setting reduction='elementwise_mean'.
+loss_fn = torch.nn.MSELoss(reduction='sum')
 
 learning_rate = 1e-4
 for t in range(500):
@@ -528,7 +532,7 @@ model = torch.nn.Sequential(
           torch.nn.ReLU(),
           torch.nn.Linear(H, D_out),
         )
-loss_fn = torch.nn.MSELoss(size_average=False)
+loss_fn = torch.nn.MSELoss(reduction='sum')
 
 # Use the optim package to define an Optimizer that will update the weights of
 # the model for us. Here we will use Adam; the optim package contains many other
@@ -603,7 +607,7 @@ model = TwoLayerNet(D_in, H, D_out)
 # Construct our loss function and an Optimizer. The call to model.parameters()
 # in the SGD constructor will contain the learnable parameters of the two
 # nn.Linear modules which are members of the model.
-loss_fn = torch.nn.MSELoss(size_average=False)
+loss_fn = torch.nn.MSELoss(reduction='sum')
 optimizer = torch.optim.SGD(model.parameters(), lr=1e-4)
 for t in range(500):
   # Forward pass: Compute predicted y by passing x to the model
@@ -683,7 +687,7 @@ model = DynamicNet(D_in, H, D_out)
 
 # Construct our loss function and an Optimizer. Training this strange model with
 # vanilla stochastic gradient descent is tough, so we use momentum
-criterion = torch.nn.MSELoss(size_average=False)
+criterion = torch.nn.MSELoss(reduction='sum')
 optimizer = torch.optim.SGD(model.parameters(), lr=1e-4, momentum=0.9)
 for t in range(500):
   # Forward pass: Compute predicted y by passing x to the model

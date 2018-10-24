@@ -36,8 +36,12 @@ model = torch.nn.Sequential(
         ).to(device)
 
 # The nn package also contains definitions of popular loss functions; in this
-# case we will use Mean Squared Error (MSE) as our loss function.
-loss_fn = torch.nn.MSELoss(size_average=False)
+# case we will use Mean Squared Error (MSE) as our loss function. Setting
+# reduction='sum' means that we are computing the *sum* of squared errors rather
+# than the mean; this is for consistency with the examples above where we
+# manually compute the loss, but in practice it is more common to use mean
+# squared error as a loss by setting reduction='elementwise_mean'.
+loss_fn = torch.nn.MSELoss(reduction='sum')
 
 learning_rate = 1e-4
 for t in range(500):
