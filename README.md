@@ -65,7 +65,7 @@ for t in range(500):
   loss = np.square(y_pred - y).sum()
   print(t, loss)
   
-  # Backprop to compute gradients of w1 and w2 with respect to loss
+  # Backprop to compute gradients of loss with respect to weights w1 and w2
   grad_y_pred = 2.0 * (y_pred - y)
   grad_w2 = h_relu.T.dot(grad_y_pred)
   grad_h_relu = grad_y_pred.dot(w2.T)
@@ -131,7 +131,7 @@ for t in range(500):
   loss = (y_pred - y).pow(2).sum()
   print(t, loss.item())
 
-  # Backprop to compute gradients of w1 and w2 with respect to loss
+  # Backprop to compute gradients of loss with respect to weights w1 and w2
   grad_y_pred = 2.0 * (y_pred - y)
   grad_w2 = h_relu.t().mm(grad_y_pred)
   grad_h_relu = grad_y_pred.mm(w2.t())
